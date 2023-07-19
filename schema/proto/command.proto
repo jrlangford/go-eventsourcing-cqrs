@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package command;
+
+service Command {
+    rpc Execute(CommandMessage) returns (EmptyResponse);
+}
+
+message CreateInventoryItem {
+    string name = 1;
+}
+
+message DeactivateInventoryItem {
+    string uuid = 1;
+}
+
+message RenameInventoryItem {
+    string uuid = 1;
+    string new_name = 2;
+}
+
+message CheckInItemsToInventory {
+    string uuid = 1;
+    int64 count = 2;
+}
+
+message RemoveItemsFromInventory {
+    string uuid = 1;
+    int64 count = 2;
+}
+
+message CommandMessage {
+  oneof command {
+    CreateInventoryItem create_inventory_item = 1;
+    DeactivateInventoryItem deactivate_inventory_item = 2;
+    RenameInventoryItem rename_inventory_item = 3;
+    CheckInItemsToInventory check_in_items_to_inventory = 4;
+    RemoveItemsFromInventory remove_items_from_inventory = 5;
+  }
+}
+
+message EmptyResponse {}

@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package query;
+
+service Query {
+    rpc Run(QueryMessage) returns (QueryResponse) {}
+}
+
+message InventoryItemListDto {
+	string ID = 1;
+	string Name = 2;
+}
+
+message GetInventoryItemsRequest {
+}
+
+message GetInventoryItemsResponse {
+    repeated InventoryItemListDto itemList = 1;
+}
+
+message InventoryItemDetailsDto {
+	string ID = 1;
+	string Name = 2;
+	int64 CurrentCount = 3;
+	int64 Version = 4;
+}
+
+message GetInventoryItemDetailsRequest {
+    string uuid = 1;
+}
+
+message GetInventoryItemDetailsResponse {
+    InventoryItemDetailsDto itemDetails = 1;
+}
+
+message QueryMessage {
+    oneof query {
+        GetInventoryItemsRequest get_inventory_items = 1;
+        GetInventoryItemDetailsRequest get_inventory_item_details = 2;
+    }
+}
+
+message QueryResponse {
+    oneof response {
+        GetInventoryItemsResponse get_inventory_items_response = 1;
+        GetInventoryItemDetailsResponse get_inventory_item_details_response = 2;
+    }
+}
