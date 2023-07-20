@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/jrlangford/go-eventsourcing-cqrs/lib/redihash"
-	"github.com/jrlangford/go-eventsourcing-cqrs/services/query/internal/core/secports"
+	"github.com/jrlangford/go-eventsourcing-cqrs/services/query/internal/core/domain"
 	"github.com/jrlangford/go-eventsourcing-cqrs/services/query/internal/core/usecases"
 	"github.com/jrlangford/go-eventsourcing-cqrs/services/query/internal/primadapters"
 	"github.com/jrlangford/go-eventsourcing-cqrs/services/query/internal/primadapters/pb"
@@ -41,8 +41,8 @@ func (srv *server) Run() {
 
 	qr := usecases.NewQueryRunner(
 		rdb,
-		redihash.NewHashReader[secports.InventoryItemListDto](rdb, PUBLIC_INVENTORY_LIST_KEY),
-		redihash.NewHashReader[secports.InventoryItemDetailsDto](rdb, PUBLIC_INVENTORY_DETAILS_KEY),
+		redihash.NewHashReader[domain.InventoryItemList](rdb, PUBLIC_INVENTORY_LIST_KEY),
+		redihash.NewHashReader[domain.InventoryItemDetails](rdb, PUBLIC_INVENTORY_DETAILS_KEY),
 	)
 
 	queryServer := primadapters.NewQueryServer(qr)
@@ -50,7 +50,7 @@ func (srv *server) Run() {
 	server := grpc.NewServer()
 	pb.RegisterQueryServer(server, queryServer)
 
-	listener, err := net.Listen("tcp", queryListenAddress + ":50052")
+	listener, err := net.Listen("tcp", queryListenAddress+":50052")
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}

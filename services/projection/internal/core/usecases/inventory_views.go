@@ -32,7 +32,7 @@ func (v *inventoryListView) Handle(message es.EventMessage) {
 		v.repo.Write(
 			v.ctx,
 			message.AggregateID(),
-			&secports.InventoryItemListDto{Name: event.Name},
+			&domain.InventoryItemList{Name: event.Name},
 		)
 
 	case *domain.InventoryItemRenamed:
@@ -40,7 +40,7 @@ func (v *inventoryListView) Handle(message es.EventMessage) {
 		v.repo.Update(
 			v.ctx,
 			message.AggregateID(),
-			func(dto *secports.InventoryItemListDto) {
+			func(dto *domain.InventoryItemList) {
 				dto.Name = event.NewName
 			},
 		)
@@ -76,7 +76,7 @@ func (v *inventoryItemDetailView) Handle(message es.EventMessage) {
 		v.repo.Write(
 			v.ctx,
 			message.AggregateID(),
-			&secports.InventoryItemDetailsDto{
+			&domain.InventoryItemDetails{
 				Name:    event.Name,
 				Version: 0,
 			},
@@ -87,7 +87,7 @@ func (v *inventoryItemDetailView) Handle(message es.EventMessage) {
 		v.repo.Update(
 			v.ctx,
 			message.AggregateID(),
-			func(dto *secports.InventoryItemDetailsDto) {
+			func(dto *domain.InventoryItemDetails) {
 				dto.Name = event.NewName
 				dto.Version = *message.Version()
 			},
@@ -98,7 +98,7 @@ func (v *inventoryItemDetailView) Handle(message es.EventMessage) {
 		v.repo.Update(
 			v.ctx,
 			message.AggregateID(),
-			func(dto *secports.InventoryItemDetailsDto) {
+			func(dto *domain.InventoryItemDetails) {
 				dto.CurrentCount -= event.Count
 				dto.Version = *message.Version()
 			},
@@ -109,7 +109,7 @@ func (v *inventoryItemDetailView) Handle(message es.EventMessage) {
 		v.repo.Update(
 			v.ctx,
 			message.AggregateID(),
-			func(dto *secports.InventoryItemDetailsDto) {
+			func(dto *domain.InventoryItemDetails) {
 				dto.CurrentCount += event.Count
 				dto.Version = *message.Version()
 			},

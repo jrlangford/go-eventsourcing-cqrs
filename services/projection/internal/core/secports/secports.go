@@ -2,6 +2,8 @@ package secports
 
 import (
 	"context"
+
+	"github.com/jrlangford/go-eventsourcing-cqrs/services/projection/internal/core/domain"
 )
 
 // ProjectionRepo wraps the methods for the repository of the provided type.
@@ -11,8 +13,8 @@ type ProjectionRepo[T any] interface {
 	Del(ctx context.Context, dataKey string) error
 }
 
-// InventoryItemListRepo is an alias for an InventoryItemListDto projection repo.
-type InventoryItemListRepo = ProjectionRepo[InventoryItemListDto]
+// InventoryItemListRepo is an alias for an InventoryItemList projection repo.
+type InventoryItemListRepo = ProjectionRepo[domain.InventoryItemList]
 
-// InventoryItemDetailsRepo is an alias for an InventoryItemDetailsDto projection repo.
-type InventoryItemDetailsRepo = ProjectionRepo[InventoryItemDetailsDto]
+// InventoryItemDetailsRepo is an alias for an InventoryItemDetails projection repo.
+type InventoryItemDetailsRepo = ProjectionRepo[domain.InventoryItemDetails]

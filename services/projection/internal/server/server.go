@@ -6,7 +6,7 @@ import (
 
 	"github.com/EventStore/EventStore-Client-Go/v3/esdb"
 	"github.com/jrlangford/go-eventsourcing-cqrs/lib/redihash"
-	"github.com/jrlangford/go-eventsourcing-cqrs/services/projection/internal/core/secports"
+	"github.com/jrlangford/go-eventsourcing-cqrs/services/projection/internal/core/domain"
 	"github.com/jrlangford/go-eventsourcing-cqrs/services/projection/internal/core/usecases"
 	"github.com/jrlangford/go-eventsourcing-cqrs/services/projection/internal/primadapters"
 	redis "github.com/redis/go-redis/v9"
@@ -48,8 +48,8 @@ func (srv *server) Run() {
 	}
 
 	projector := usecases.NewProjector(
-		redihash.NewHashReadWriter[secports.InventoryItemListDto](rdb, PUBLIC_INVENTORY_LIST_KEY),
-		redihash.NewHashReadWriter[secports.InventoryItemDetailsDto](rdb, PUBLIC_INVENTORY_DETAILS_KEY),
+		redihash.NewHashReadWriter[domain.InventoryItemList](rdb, PUBLIC_INVENTORY_LIST_KEY),
+		redihash.NewHashReadWriter[domain.InventoryItemDetails](rdb, PUBLIC_INVENTORY_DETAILS_KEY),
 	)
 
 	consumer := primadapters.NewEventConsumer(esdbClient, projector)

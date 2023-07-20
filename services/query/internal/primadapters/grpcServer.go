@@ -7,7 +7,6 @@ import (
 	"github.com/jrlangford/go-eventsourcing-cqrs/lib/query"
 	"github.com/jrlangford/go-eventsourcing-cqrs/services/query/internal/core/domain"
 	"github.com/jrlangford/go-eventsourcing-cqrs/services/query/internal/core/primports"
-	"github.com/jrlangford/go-eventsourcing-cqrs/services/query/internal/core/secports"
 	"github.com/jrlangford/go-eventsourcing-cqrs/services/query/internal/primadapters/pb"
 )
 
@@ -35,15 +34,15 @@ func (qs *queryServer) Run(ctx context.Context, req *pb.QueryMessage) (*pb.Query
 			return nil, err
 		}
 
-		items, ok := data.([]*secports.InventoryItemListDto)
+		items, ok := data.([]*domain.InventoryItemList)
 		if !ok {
 			return nil, fmt.Errorf("Received incorrect data type")
 		}
 
-		respItems := make([]*pb.InventoryItemListDto, 0, len(items))
+		respItems := make([]*pb.InventoryItemList, 0, len(items))
 
 		for _, val := range items {
-			respItems = append(respItems, &pb.InventoryItemListDto{
+			respItems = append(respItems, &pb.InventoryItemList{
 				ID:   val.ID,
 				Name: val.Name,
 			})
@@ -69,13 +68,13 @@ func (qs *queryServer) Run(ctx context.Context, req *pb.QueryMessage) (*pb.Query
 			return nil, err
 		}
 
-		details, ok := data.(*secports.InventoryItemDetailsDto)
+		details, ok := data.(*domain.InventoryItemDetails)
 		if !ok {
 			return nil, fmt.Errorf("Received incorrect data type")
 		}
 
 		respDetails := &pb.GetInventoryItemDetailsResponse{
-			ItemDetails: &pb.InventoryItemDetailsDto{
+			ItemDetails: &pb.InventoryItemDetails{
 				ID:           details.ID,
 				Name:         details.Name,
 				CurrentCount: int64(details.CurrentCount),

@@ -41,7 +41,7 @@ func (qh *inventoryQueryHandler) Handle(message query.QueryMessage) (interface{}
 			return nil, err
 		}
 
-		itemsList := make([]*secports.InventoryItemListDto, 0, len(items))
+		itemsList := make([]*domain.InventoryItemList, 0, len(items))
 
 		for k, v := range items {
 			v.ID = k

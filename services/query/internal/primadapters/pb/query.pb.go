@@ -20,7 +20,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type InventoryItemListDto struct {
+type InventoryItemList struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -29,8 +29,8 @@ type InventoryItemListDto struct {
 	Name string `protobuf:"bytes,2,opt,name=Name,proto3" json:"Name,omitempty"`
 }
 
-func (x *InventoryItemListDto) Reset() {
-	*x = InventoryItemListDto{}
+func (x *InventoryItemList) Reset() {
+	*x = InventoryItemList{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_query_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -38,13 +38,13 @@ func (x *InventoryItemListDto) Reset() {
 	}
 }
 
-func (x *InventoryItemListDto) String() string {
+func (x *InventoryItemList) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*InventoryItemListDto) ProtoMessage() {}
+func (*InventoryItemList) ProtoMessage() {}
 
-func (x *InventoryItemListDto) ProtoReflect() protoreflect.Message {
+func (x *InventoryItemList) ProtoReflect() protoreflect.Message {
 	mi := &file_query_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -56,19 +56,19 @@ func (x *InventoryItemListDto) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use InventoryItemListDto.ProtoReflect.Descriptor instead.
-func (*InventoryItemListDto) Descriptor() ([]byte, []int) {
+// Deprecated: Use InventoryItemList.ProtoReflect.Descriptor instead.
+func (*InventoryItemList) Descriptor() ([]byte, []int) {
 	return file_query_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *InventoryItemListDto) GetID() string {
+func (x *InventoryItemList) GetID() string {
 	if x != nil {
 		return x.ID
 	}
 	return ""
 }
 
-func (x *InventoryItemListDto) GetName() string {
+func (x *InventoryItemList) GetName() string {
 	if x != nil {
 		return x.Name
 	}
@@ -118,7 +118,7 @@ type GetInventoryItemsResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ItemList []*InventoryItemListDto `protobuf:"bytes,1,rep,name=itemList,proto3" json:"itemList,omitempty"`
+	ItemList []*InventoryItemList `protobuf:"bytes,1,rep,name=itemList,proto3" json:"itemList,omitempty"`
 }
 
 func (x *GetInventoryItemsResponse) Reset() {
@@ -153,14 +153,14 @@ func (*GetInventoryItemsResponse) Descriptor() ([]byte, []int) {
 	return file_query_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GetInventoryItemsResponse) GetItemList() []*InventoryItemListDto {
+func (x *GetInventoryItemsResponse) GetItemList() []*InventoryItemList {
 	if x != nil {
 		return x.ItemList
 	}
 	return nil
 }
 
-type InventoryItemDetailsDto struct {
+type InventoryItemDetails struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -171,8 +171,8 @@ type InventoryItemDetailsDto struct {
 	Version      int64  `protobuf:"varint,4,opt,name=Version,proto3" json:"Version,omitempty"`
 }
 
-func (x *InventoryItemDetailsDto) Reset() {
-	*x = InventoryItemDetailsDto{}
+func (x *InventoryItemDetails) Reset() {
+	*x = InventoryItemDetails{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_query_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -180,13 +180,13 @@ func (x *InventoryItemDetailsDto) Reset() {
 	}
 }
 
-func (x *InventoryItemDetailsDto) String() string {
+func (x *InventoryItemDetails) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*InventoryItemDetailsDto) ProtoMessage() {}
+func (*InventoryItemDetails) ProtoMessage() {}
 
-func (x *InventoryItemDetailsDto) ProtoReflect() protoreflect.Message {
+func (x *InventoryItemDetails) ProtoReflect() protoreflect.Message {
 	mi := &file_query_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -198,33 +198,33 @@ func (x *InventoryItemDetailsDto) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use InventoryItemDetailsDto.ProtoReflect.Descriptor instead.
-func (*InventoryItemDetailsDto) Descriptor() ([]byte, []int) {
+// Deprecated: Use InventoryItemDetails.ProtoReflect.Descriptor instead.
+func (*InventoryItemDetails) Descriptor() ([]byte, []int) {
 	return file_query_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *InventoryItemDetailsDto) GetID() string {
+func (x *InventoryItemDetails) GetID() string {
 	if x != nil {
 		return x.ID
 	}
 	return ""
 }
 
-func (x *InventoryItemDetailsDto) GetName() string {
+func (x *InventoryItemDetails) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *InventoryItemDetailsDto) GetCurrentCount() int64 {
+func (x *InventoryItemDetails) GetCurrentCount() int64 {
 	if x != nil {
 		return x.CurrentCount
 	}
 	return 0
 }
 
-func (x *InventoryItemDetailsDto) GetVersion() int64 {
+func (x *InventoryItemDetails) GetVersion() int64 {
 	if x != nil {
 		return x.Version
 	}
@@ -283,7 +283,7 @@ type GetInventoryItemDetailsResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ItemDetails *InventoryItemDetailsDto `protobuf:"bytes,1,opt,name=itemDetails,proto3" json:"itemDetails,omitempty"`
+	ItemDetails *InventoryItemDetails `protobuf:"bytes,1,opt,name=itemDetails,proto3" json:"itemDetails,omitempty"`
 }
 
 func (x *GetInventoryItemDetailsResponse) Reset() {
@@ -318,7 +318,7 @@ func (*GetInventoryItemDetailsResponse) Descriptor() ([]byte, []int) {
 	return file_query_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *GetInventoryItemDetailsResponse) GetItemDetails() *InventoryItemDetailsDto {
+func (x *GetInventoryItemDetailsResponse) GetItemDetails() *InventoryItemDetails {
 	if x != nil {
 		return x.ItemDetails
 	}
@@ -569,18 +569,18 @@ func file_query_proto_rawDescGZIP() []byte {
 
 var file_query_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_query_proto_goTypes = []interface{}{
-	(*InventoryItemListDto)(nil),            // 0: query.InventoryItemListDto
+	(*InventoryItemList)(nil),            // 0: query.InventoryItemList
 	(*GetInventoryItemsRequest)(nil),        // 1: query.GetInventoryItemsRequest
 	(*GetInventoryItemsResponse)(nil),       // 2: query.GetInventoryItemsResponse
-	(*InventoryItemDetailsDto)(nil),         // 3: query.InventoryItemDetailsDto
+	(*InventoryItemDetails)(nil),         // 3: query.InventoryItemDetails
 	(*GetInventoryItemDetailsRequest)(nil),  // 4: query.GetInventoryItemDetailsRequest
 	(*GetInventoryItemDetailsResponse)(nil), // 5: query.GetInventoryItemDetailsResponse
 	(*QueryMessage)(nil),                    // 6: query.QueryMessage
 	(*QueryResponse)(nil),                   // 7: query.QueryResponse
 }
 var file_query_proto_depIdxs = []int32{
-	0, // 0: query.GetInventoryItemsResponse.itemList:type_name -> query.InventoryItemListDto
-	3, // 1: query.GetInventoryItemDetailsResponse.itemDetails:type_name -> query.InventoryItemDetailsDto
+	0, // 0: query.GetInventoryItemsResponse.itemList:type_name -> query.InventoryItemList
+	3, // 1: query.GetInventoryItemDetailsResponse.itemDetails:type_name -> query.InventoryItemDetails
 	1, // 2: query.QueryMessage.get_inventory_items:type_name -> query.GetInventoryItemsRequest
 	4, // 3: query.QueryMessage.get_inventory_item_details:type_name -> query.GetInventoryItemDetailsRequest
 	2, // 4: query.QueryResponse.get_inventory_items_response:type_name -> query.GetInventoryItemsResponse
@@ -601,7 +601,7 @@ func file_query_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_query_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InventoryItemListDto); i {
+			switch v := v.(*InventoryItemList); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -637,7 +637,7 @@ func file_query_proto_init() {
 			}
 		}
 		file_query_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InventoryItemDetailsDto); i {
+			switch v := v.(*InventoryItemDetails); i {
 			case 0:
 				return &v.state
 			case 1:
