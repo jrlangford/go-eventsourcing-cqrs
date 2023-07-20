@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 	"net"
+	"os"
 
 	"github.com/jrlangford/go-eventsourcing-cqrs/lib/redihash"
 	"github.com/jrlangford/go-eventsourcing-cqrs/services/query/internal/core/secports"
@@ -29,8 +30,11 @@ func New() *server {
 // Run initilizes and runs the server.
 func (srv *server) Run() {
 
+	redisHost := getEnv("REDIS_HOST", "localhost")
+	queryListenAddress := getEnv("QUERY_LISTEN_ADDRESS", "localhost")
+
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     redisHost + ":6379",
 		Password: "",
 		DB:       0,
 	})
@@ -46,7 +50,7 @@ func (srv *server) Run() {
 	server := grpc.NewServer()
 	pb.RegisterQueryServer(server, queryServer)
 
-	listener, err := net.Listen("tcp", "localhost:50052")
+	listener, err := net.Listen("tcp", queryListenAddress + ":50052")
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
@@ -54,4 +58,11 @@ func (srv *server) Run() {
 	if err := server.Serve(listener); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
+}
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }

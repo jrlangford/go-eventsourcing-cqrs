@@ -2,6 +2,7 @@ package server
 
 import (
 	"log"
+	"os"
 
 	"github.com/EventStore/EventStore-Client-Go/v3/esdb"
 	"github.com/jrlangford/go-eventsourcing-cqrs/lib/redihash"
@@ -27,13 +28,16 @@ func New() *server {
 // Run initilizes and runs the server.
 func (srv *server) Run() {
 
+	redisHost := getEnv("REDIS_HOST", "localhost")
+	esdbHost := getEnv("ESDB_HOST", "localhost")
+
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     redisHost + ":6379",
 		Password: "",
 		DB:       0,
 	})
 
-	settings, err := esdb.ParseConnectionString("esdb://127.0.0.1:2113?tls=false&keepAliveTimeout=10000&keepAliveInterval=10000")
+	settings, err := esdb.ParseConnectionString("esdb://" + esdbHost + ":2113?tls=false&keepAliveTimeout=10000&keepAliveInterval=10000")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -52,4 +56,11 @@ func (srv *server) Run() {
 	consumer.InitializeSubscription("go-eventsourcing-projector")
 
 	consumer.Run()
+}
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }

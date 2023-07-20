@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 	"net"
+	"os"
 
 	"github.com/EventStore/EventStore-Client-Go/v3/esdb"
 	"github.com/jrlangford/go-eventsourcing-cqrs/services/command/internal/core/usecases"
@@ -24,7 +25,10 @@ func New() *server {
 // Run initilizes and runs the server.
 func (srv *server) Run() {
 
-	settings, err := esdb.ParseConnectionString("esdb://127.0.0.1:2113?tls=false&keepAliveTimeout=10000&keepAliveInterval=10000")
+	esdbHost := getEnv("ESDB_HOST", "localhost")
+	commandListenAddress := getEnv("COMMAND_LISTEN_ADDRESS", "localhost")
+
+	settings, err := esdb.ParseConnectionString("esdb://" + esdbHost + ":2113?tls=false&keepAliveTimeout=10000&keepAliveInterval=10000")
 
 	if err != nil {
 		panic(err)
@@ -47,7 +51,7 @@ func (srv *server) Run() {
 	server := grpc.NewServer()
 	pb.RegisterCommandServer(server, commandServer)
 
-	listener, err := net.Listen("tcp", "localhost:50051")
+	listener, err := net.Listen("tcp", commandListenAddress + ":50051")
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
@@ -55,4 +59,11 @@ func (srv *server) Run() {
 	if err := server.Serve(listener); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
+}
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }

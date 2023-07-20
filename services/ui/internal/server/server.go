@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -30,16 +31,20 @@ func New() *server {
 // Run initilizes and runs the server.
 func (srv *server) Run() {
 
+	commandHost := getEnv("COMMAND_HOST", "localhost")
+	queryHost := getEnv("QUERY_HOST", "localhost")
+	uiListenAddress := getEnv("UI_LISTEN_ADDRESS", "localhost")
+
 	srv.template = template.Must(template.ParseGlob("web/templates/*"))
 
-	commConn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	commConn, err := grpc.Dial(commandHost+":50051", grpc.WithInsecure())
 	if err != nil {
 		log.Println("Could not connect to command server:", err)
 	}
 
 	srv.commandClient = pbcommand.NewCommandClient(commConn)
 
-	queryConn, err := grpc.Dial("localhost:50052", grpc.WithInsecure())
+	queryConn, err := grpc.Dial(queryHost+":50052", grpc.WithInsecure())
 	if err != nil {
 		log.Println("Could not connect to query server:", err)
 	}
@@ -47,7 +52,7 @@ func (srv *server) Run() {
 	srv.queryClient = pbquery.NewQueryClient(queryConn)
 
 	mux := srv.setupHandlers()
-	if err := http.ListenAndServe("localhost:8088", mux); err != nil {
+	if err := http.ListenAndServe(uiListenAddress+":8088", mux); err != nil {
 		log.Println(err)
 	}
 
@@ -353,4 +358,11 @@ func (srv *server) setupHandlers() *http.ServeMux {
 	})
 
 	return mux
+}
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }
