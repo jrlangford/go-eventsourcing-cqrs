@@ -1,10 +1,73 @@
 version: "3.8"
 
 services:
+  command:
+    image: go-eventsourcing-cqrs-command
+    build:
+      target: dev
+      context: ./services/command
+      dockerfile: ./Dockerfile
+      x-bake:
+        contexts:
+          lib: "lib"
+    environment:
+      - ESDB_HOST=eventstore
+      - COMMAND_LISTEN_ADDRESS=0.0.0.0
+    depends_on:
+      - eventstore
+  projection:
+    image: go-eventsourcing-cqrs-projection
+    build:
+      target: dev
+      context: ./services/projection
+      dockerfile: ./Dockerfile
+      x-bake:
+        contexts:
+          lib: "lib"
+    environment:
+      - REDIS_HOST=redis
+      - ESDB_HOST=eventstore
+    depends_on:
+      - eventstore
+      - redis
+    restart: on-failure
+  query:
+    image: go-eventsourcing-cqrs-query
+    build:
+      target: dev
+      context: ./services/query
+      dockerfile: ./Dockerfile
+      x-bake:
+        contexts:
+          lib: "lib"
+    environment:
+      - REDIS_HOST=redis
+      - QUERY_LISTEN_ADDRESS=0.0.0.0
+    depends_on:
+      - redis
+  ui:
+    image: go-eventsourcing-cqrs-ui
+    build:
+      target: dev
+      context: ./services/ui
+      dockerfile: ./Dockerfile
+      x-bake:
+        contexts:
+          lib: "lib"
+    environment:
+      - COMMAND_HOST=command
+      - QUERY_HOST=query
+      - UI_LISTEN_ADDRESS=0.0.0.0
+    ports:
+      - "8088:8088"
+    depends_on:
+      - command
+      - query
   eventstore:
     image: eventstore/eventstore:latest
     environment:
       - EVENTSTORE_CLUSTER_SIZE=1
+      - EVENTSTORE_EXT_IP=0.0.0.0
       - EVENTSTORE_EXT_TCP_PORT=1113
       - EVENTSTORE_HTTP_PORT=2113
       - EVENTSTORE_INSECURE=true
