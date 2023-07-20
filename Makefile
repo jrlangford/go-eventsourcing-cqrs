@@ -42,19 +42,23 @@ $(UI_QUERY_PROTO) &: schema/proto/query.proto
 
 .PHONY: docker-up
 docker-up:
-	docker-compose -p go-eventsourcing up -d
+	docker-compose -p go-eventsourcing-cqrs up
 
 .PHONY: docker-down
 docker-down:
-	docker-compose -p go-eventsourcing down
+	docker-compose -p go-eventsourcing-cqrs down
+
+.PHONY: docker-build
+docker-build:
+	docker buildx bake
 
 .PHONY: redis-flushdb
 redis-flushdb:
-	docker exec go-eventsourcing-redis-1 redis-cli flushdb
+	docker exec go-eventsourcing-cqrs-redis-1 redis-cli flushdb
 
 .PHONY: eventstore-flushdb
 eventstore-flushdb:
-	docker restart go-eventsourcing-eventstore-1
+	docker restart go-eventsourcing-cqrs-eventstore-1
 
 .PHONY: flush
 flush: redis-flushdb eventstore-flushdb
