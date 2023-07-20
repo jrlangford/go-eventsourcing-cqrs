@@ -12,7 +12,7 @@ import (
 type Projector struct {
 	invItemListRepo    secports.InventoryItemListRepo
 	invItemDetailsRepo secports.InventoryItemDetailsRepo
-	eventBus           *es.InternalEventBus
+	eventBus           *es.InternalEventDispatcher
 }
 
 // NewProjector is self-describing.
@@ -25,7 +25,7 @@ func NewProjector(
 	listView := newInventoryListView(invItemListRepo)
 	detailView := newInventoryItemDetailView(invItemDetailsRepo)
 
-	eventBus := es.NewInternalEventBus()
+	eventBus := es.NewInternalEventDispatcher()
 
 	eventBus.AddHandler(listView,
 		&domain.InventoryItemCreated{},
@@ -59,7 +59,7 @@ func (p *Projector) ProjectEvent(
 
 	em := es.NewEventMessage(aggregateID, domainEvent, version)
 	em.SetUserMetadata(metadata)
-	p.eventBus.PublishEvent(em)
+	p.eventBus.Dispatch(em)
 	// TODO: Handle errors
 	return nil
 }

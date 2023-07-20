@@ -12,27 +12,27 @@
 
 package eventsourcing
 
-// EventBus is the inteface that an event bus must implement.
-type EventBus interface {
-	PublishEvent(EventMessage)
+// EventDispatcher is the inteface that an event bus must implement.
+type EventDispatcher interface {
+	Dispatch(EventMessage)
 	AddHandler(EventHandler, ...interface{})
 }
 
-// InternalEventBus provides a lightweight in process event bus
-type InternalEventBus struct {
+// InternalEventDispatcher provides a lightweight in process event bus
+type InternalEventDispatcher struct {
 	eventHandlers map[string]map[EventHandler]struct{}
 }
 
-// NewInternalEventBus constructs a new InternalEventBus
-func NewInternalEventBus() *InternalEventBus {
-	b := &InternalEventBus{
+// NewInternalEventDispatcher constructs a new InternalEventDispatcher
+func NewInternalEventDispatcher() *InternalEventDispatcher {
+	b := &InternalEventDispatcher{
 		eventHandlers: make(map[string]map[EventHandler]struct{}),
 	}
 	return b
 }
 
-// PublishEvent publishes events to all registered event handlers
-func (b *InternalEventBus) PublishEvent(event EventMessage) {
+// Dispatch publishes events to all registered event handlers
+func (b *InternalEventDispatcher) Dispatch(event EventMessage) {
 	if handlers, ok := b.eventHandlers[event.EventType()]; ok {
 		for handler := range handlers {
 			handler.Handle(event)
@@ -42,7 +42,7 @@ func (b *InternalEventBus) PublishEvent(event EventMessage) {
 
 // AddHandler registers an event handler for all of the events specified in the
 // variadic events parameter.
-func (b *InternalEventBus) AddHandler(handler EventHandler, events ...interface{}) {
+func (b *InternalEventDispatcher) AddHandler(handler EventHandler, events ...interface{}) {
 
 	for _, event := range events {
 		typeName := typeOf(event)
